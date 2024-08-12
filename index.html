@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eagles Spots</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #mapid {
+            width: 100%;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            height: calc(100vh - 50px);
+            transition: top 0.3s ease, height 0.3s ease;
+        }
+
+        #banner {
+            position: fixed;
+            top: -50px;
+            /* Cacher la bannière au départ */
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: white;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            box-sizing: border-box;
+            z-index: 1001;
+            transition: top 0.3s ease;
+        }
+
+        #banner img {
+            height: 50px;
+            /* Ajuster la taille du logo */
+        }
+
+        #banner h1 {
+            color: black;
+            font-size: 18px;
+        }
+
+        #banner button {
+            background: none;
+            border: none;
+            color: black;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0;
+            margin-right: 15px;
+
+        }
+
+        #banner button:hover {
+            color: #00aa91;
+        }
+
+        #locate-button {
+            position: absolute;
+            top: 60px;
+            /* Ajuster la hauteur initiale */
+            right: 10px;
+            z-index: 1000;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px;
+            transition: top 0.3s ease;
+            /* Ajout de la transition pour le mouvement */
+        }
+
+        .fa-crosshairs {
+            font-size: 24px;
+            color: blue;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        #popup-form {
+            display: none;
+            position: fixed;
+            background-color: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+            max-width: 80%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #popup-form .banner {
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+        }
+
+        #popup-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #popup-form label {
+            margin-top: 10px;
+        }
+
+        #popup-form input[type="text"],
+        #popup-form textarea {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: calc(100% - 12px);
+        }
+
+        #popup-form button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #popup-form button.cancel {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="banner">
+        <img src="logo.jpg" alt="Logo">
+        <h1>Eagles Spots</h1>
+        <button id="login-button">
+            <i class="fas fa-user"></i>
+        </button>
+    </div>
+    <div id="mapid"></div>
+    <button id="locate-button">
+        <i class="fas fa-crosshairs"></i>
+    </button>
+    <div id="overlay"></div>
+    <div id="popup-form">
+        <div class="banner">Importer une image</div>
+        <form id="spot-form">
+            <label for="name">Nom :</label>
+            <input type="text" id="name" required><br>
+            <label for="note">Note :</label>
+            <textarea id="note"></textarea><br>
+            <input type="file" id="photo" accept="image/*" style="display: none;"><br>
+            <button type="submit">Ajouter</button>
+            <button type="button" class="cancel">Annuler</button>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var mymap = L.map('mapid').setView([0, 0], 13);
+            var spotsLayer = L.layerGroup().addTo(mymap);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(mymap);
+
+            var userMarker;
+            var userIcon = L.divIcon({
+                className: 'user-icon',
+                html: '<div style="background-color: blue; width: 10px; height: 10px; border-radius: 50%;"></div>',
+                iconSize: [12, 12],
+                iconAnchor: [6, 6]
+            });
+
+            var spotIcon = L.icon({
+                iconUrl: 'marqueur_jaune.png',
+                iconSize: [25, 25],
+                iconAnchor: [12, 24],
+                popupAnchor: [0, -24]
+            });
+
+            function onLocationFound(e) {
+                if (userMarker) {
+                    mymap.removeLayer(userMarker);
+                }
+                userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(mymap);
+                mymap.setView(e.latlng, 16);
+            }
+
+            function onLocationError(e) {
+                alert('Erreur de géolocalisation: ' + e.message);
+            }
+
+            function locateUser() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        onLocationFound({ latlng: L.latLng(lat, lng) });
+                    }, onLocationError, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+                } else {
+                    alert("La géolocalisation n'est pas supportée par ce navigateur.");
+                }
+            }
+
+            locateUser();
+
+            document.getElementById('locate-button').onclick = function () {
+                locateUser();
+            };
+
+            mymap.on('click', function (e) {
+                var form = document.getElementById('popup-form');
+                var overlay = document.getElementById('overlay');
+                form.style.display = 'block';
+                overlay.style.display = 'block';
+
+                var tempMarker = L.marker(e.latlng, { icon: spotIcon }).addTo(spotsLayer);
+
+                document.querySelector('.banner').onclick = function () {
+                    document.getElementById('photo').click();
+                };
+
+                document.getElementById('spot-form').onsubmit = function (event) {
+                    event.preventDefault();
+                    var name = document.getElementById('name').value;
+                    var note = document.getElementById('note').value;
+                    var photo = document.getElementById('photo').files[0];
+
+                    var formData = new FormData();
+                    formData.append('nom', name);
+                    formData.append('lat', e.latlng.lat);
+                    formData.append('lng', e.latlng.lng);
+                    formData.append('note', note);
+                    if (photo) {
+                        formData.append('photo', photo);
+                    }
+
+                    fetch('http://localhost:3000/points', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            tempMarker.bindPopup('<b>' + data.nom + '</b><br>' + data.note).openPopup();
+                        })
+                        .catch(error => {
+                            console.error('Erreur:', error);
+                        });
+
+                    form.style.display = 'none';
+                    overlay.style.display = 'none';
+                    document.getElementById('spot-form').reset();
+                };
+
+                document.querySelector('.cancel').onclick = function () {
+                    form.style.display = 'none';
+                    overlay.style.display = 'none';
+                    document.getElementById('spot-form').reset();
+                    spotsLayer.removeLayer(tempMarker);
+                };
+
+                overlay.onclick = function () {
+                    form.style.display = 'none';
+                    overlay.style.display = 'none';
+                    document.getElementById('spot-form').reset();
+                    spotsLayer.removeLayer(tempMarker);
+                };
+            });
+
+            fetch('http://localhost:3000/points')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(function (point) {
+                        var marker = L.marker([point.lat, point.lng], { icon: spotIcon }).addTo(spotsLayer);
+                        var popupContent = '<b>' + point.nom + '</b><br>' + point.note;
+                        if (point.photo) {
+                            popupContent += '<br><img src="' + point.photo + '" alt="Photo" style="width:100px;">';
+                        }
+                        marker.bindPopup(popupContent);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des points:', error);
+                });
+
+            // Script pour la bannière et la carte
+            var banner = document.getElementById('banner');
+            var map = document.getElementById('mapid');
+            var locateButton = document.getElementById('locate-button');
+            var bannerHeight = 50; // Hauteur de la bannière
+
+            // Fonction pour ajuster la taille de la carte et la position du bouton de localisation
+            function adjustMapHeight() {
+                var isBannerVisible = banner.style.top === '0px';
+                var newHeight = window.innerHeight - (isBannerVisible ? bannerHeight : 0);
+                map.style.top = isBannerVisible ? bannerHeight + 'px' : '0px';
+                map.style.height = newHeight + 'px';
+                locateButton.style.top = isBannerVisible ? (bannerHeight + 10) + 'px' : '10px';
+            }
+
+            // Écouteur d'événement pour détecter lorsque la souris est en haut de la page
+            document.addEventListener('mousemove', function (e) {
+                if (e.clientY < 30) {
+                    banner.style.top = '0px';
+                } else {
+                    banner.style.top = '-50px';
+                }
+                adjustMapHeight();
+            });
+
+            // Initialiser la taille de la carte
+            adjustMapHeight();
+        });
+    </script>
+</body>
+
+</html>
