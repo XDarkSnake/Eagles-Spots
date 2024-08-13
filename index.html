@@ -61,7 +61,6 @@
             font-size: 24px;
             padding: 0;
             margin-right: 15px;
-
         }
 
         #banner button:hover {
@@ -313,6 +312,7 @@
                 .catch(error => {
                     console.error('Erreur lors du chargement des points:', error);
                 });
+
             var banner = document.getElementById('banner');
             var map = document.getElementById('mapid');
             var locateButton = document.getElementById('locate-button');
@@ -336,6 +336,10 @@
             });
 
             adjustMapHeight();
+
+            document.getElementById('login-button').addEventListener('click', function () {
+                window.location.href = 'https://xdarksnake.github.io/Eagles-Spots/login';
+            });
         });
     </script>
 </body>
