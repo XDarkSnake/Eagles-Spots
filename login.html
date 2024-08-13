@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> <!--https://boxicons.com/ -->
-    <title>Login</title>
+    <title>Connexion</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
@@ -126,6 +126,7 @@
         }
 
         @keyframes move {
+
             0%,
             49.99% {
                 opacity: 0;
@@ -221,50 +222,50 @@
 
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form>
-                <h1>Create Account</h1>
+            <form id="sign-up-form">
+                <h1>Créer un compte</h1>
                 <div class="social-icons">
                     <a href="#" class="icons"><i class='bx bxl-google'></i></a>
                     <a href="#" class="icons"><i class='bx bxl-facebook'></i></a>
                     <a href="#" class="icons"><i class='bx bxl-github'></i></a>
                     <a href="#" class="icons"><i class='bx bxl-linkedin'></i></a>
                 </div>
-                <span>Register with E-mail</span>
-                <input type="text" placeholder="Name">
-                <input type="email" placeholder="Enter E-mail">
-                <input type="password" placeholder="Enter Password">
-                <button>Sign Up</button>
+                <span>Inscrivez-vous avec un e-mail</span>
+                <input type="text" id="signup-name" placeholder="Nom" required>
+                <input type="email" id="signup-email" placeholder="Entrez votre e-mail" required>
+                <input type="password" id="signup-password" placeholder="Entrez votre mot de passe" required>
+                <button type="submit">Inscription</button>
             </form>
         </div>
 
         <div class="form-container sign-in">
-            <form>
-                <h1>Sign In</h1>
+            <form id="sign-in-form">
+                <h1>Connexion</h1>
                 <div class="social-icons">
                     <a href="#" class="icons"><i class='bx bxl-google'></i></a>
                     <a href="#" class="icons"><i class='bx bxl-facebook'></i></a>
                     <a href="#" class="icons"><i class='bx bxl-github'></i></a>
                     <a href="#" class="icons"><i class='bx bxl-linkedin'></i></a>
                 </div>
-                <span>Login With Email & Password</span>
-                <input type="email" placeholder="Enter E-mail">
-                <input type="password" placeholder="Enter Password">
-                <a href="#">Forget Password?</a>
-                <button>Sign In</button>
+                <span>Connectez-vous avec e-mail et mot de passe</span>
+                <input type="email" id="signin-email" placeholder="Entrez votre e-mail" required>
+                <input type="password" id="signin-password" placeholder="Entrez votre mot de passe" required>
+                <a href="#">Mot de passe oublié ?</a>
+                <button type="submit">Connexion</button>
             </form>
         </div>
 
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
-                    <h1>Welcome To <br>Code with Patel</h1>
-                    <p>Sign in With ID & Password</p>
-                    <button class="hidden" id="login">Sign In</button>
+                    <h1>Heureux de vous revoir !</h1>
+                    <p>Connectez-vous avec ID & mot de passe</p>
+                    <button class="hidden" id="login">Connexion</button>
                 </div>
                 <div class="toggle-panel toggle-right">
-                    <h1>Hii Coder's</h1>
-                    <p>Join "Code With Patel" to Improve Your Coding Skills</p>
-                    <button class="hidden" id="register">Sign Up</button>
+                    <h1>Salut !</h1>
+                    <p>Créer un compte pour commencer</p>
+                    <button class="hidden" id="register">Inscription</button>
                 </div>
             </div>
         </div>
@@ -274,6 +275,8 @@
         const container = document.getElementById('container');
         const registerBtn = document.getElementById('register');
         const loginBtn = document.getElementById('login');
+        const signUpForm = document.getElementById('sign-up-form');
+        const signInForm = document.getElementById('sign-in-form');
 
         registerBtn.addEventListener('click', () => {
             container.classList.add("active");
@@ -281,6 +284,68 @@
 
         loginBtn.addEventListener('click', () => {
             container.classList.remove("active");
+        });
+
+        signUpForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Empêche le rechargement de la page
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            // Envoi des données au serveur
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'register',
+                        name,
+                        email,
+                        password
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Inscription réussie !');
+                } else {
+                    alert('Erreur lors de l\'inscription.');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue.');
+            }
+        });
+
+        signInForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Empêche le rechargement de la page
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+
+            // Envoi des données au serveur
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'login',
+                        email,
+                        password
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Connexion réussie !');
+                } else {
+                    alert('Erreur lors de la connexion.');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue.');
+            }
         });
     </script>
 </body>
