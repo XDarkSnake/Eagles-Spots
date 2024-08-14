@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> <!--https://boxicons.com/ -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Connexion</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
@@ -287,65 +287,4 @@
 
         signUpForm.addEventListener('submit', async (event) => {
             event.preventDefault(); // Empêche le rechargement de la page
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-
-            try {
-                const response = await fetch('http://localhost:3000/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'register',
-                        name,
-                        email,
-                        password
-                    })
-                });
-
-                if (response.ok) {
-                    alert('Inscription réussie !');
-                } else {
-                    alert('Erreur lors de l\'inscription.');
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-                alert('Une erreur est survenue.');
-            }
-        });
-
-        signInForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const email = document.getElementById('signin-email').value;
-            const password = document.getElementById('signin-password').value;
-
-            try {
-                const response = await fetch('http://localhost:3000/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'login',
-                        email,
-                        password
-                    })
-                });
-
-                if (response.ok) {
-                    alert('Connexion réussie !');
-                } else {
-                    alert('Erreur lors de la connexion.');
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-                alert('Une erreur est survenue.');
-            }
-        });
-    </script>
-
-</body>
-
-</html>
+            const name = document.getElementById('
