@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> <!--https://boxicons.com/ -->
     <title>Connexion</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
@@ -233,11 +233,11 @@
                 <span>Inscrivez-vous avec un e-mail</span>
                 <input type="text" id="signup-name" placeholder="Nom" required>
                 <input type="email" id="signup-email" placeholder="Entrez votre e-mail" required>
-                <input type="password" id="signup-password" placeholder="Mot de passe" required>
-                <button type="submit">S'inscrire</button>
-                <p>Déjà inscrit ? <a href="#" id="sign-in-link">Connectez-vous</a></p>
+                <input type="password" id="signup-password" placeholder="Entrez votre mot de passe" required>
+                <button type="submit">Inscription</button>
             </form>
         </div>
+
         <div class="form-container sign-in">
             <form id="sign-in-form">
                 <h1>Connexion</h1>
@@ -247,65 +247,70 @@
                     <a href="#" class="icons"><i class='bx bxl-github'></i></a>
                     <a href="#" class="icons"><i class='bx bxl-linkedin'></i></a>
                 </div>
-                <span>Connectez-vous avec un e-mail</span>
+                <span>Connectez-vous avec e-mail et mot de passe</span>
                 <input type="email" id="signin-email" placeholder="Entrez votre e-mail" required>
-                <input type="password" id="signin-password" placeholder="Mot de passe" required>
-                <button type="submit">Se connecter</button>
-                <p>Pas encore inscrit ? <a href="#" id="sign-up-link">Inscrivez-vous</a></p>
+                <input type="password" id="signin-password" placeholder="Entrez votre mot de passe" required>
+                <a href="#">Mot de passe oublié ?</a>
+                <button type="submit">Connexion</button>
             </form>
         </div>
+
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
-                    <h1>Bienvenue !</h1>
-                    <p>Pour accéder à toutes les fonctionnalités, veuillez vous inscrire.</p>
+                    <h1>Heureux de vous revoir !</h1>
+                    <p>Connectez-vous avec ID & mot de passe</p>
+                    <button class="hidden" id="login">Connexion</button>
                 </div>
                 <div class="toggle-panel toggle-right">
-                    <h1>Déjà inscrit ?</h1>
-                    <p>Connectez-vous pour continuer.</p>
+                    <h1>Salut !</h1>
+                    <p>Créer un compte pour commencer</p>
+                    <button class="hidden" id="register">Inscription</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const signInForm = document.getElementById('sign-in-form');
-        const signUpForm = document.getElementById('sign-up-form');
         const container = document.getElementById('container');
-        const signInLink = document.getElementById('sign-in-link');
-        const signUpLink = document.getElementById('sign-up-link');
+        const registerBtn = document.getElementById('register');
+        const loginBtn = document.getElementById('login');
+        const signUpForm = document.getElementById('sign-up-form');
+        const signInForm = document.getElementById('sign-in-form');
 
-        signInLink.addEventListener('click', () => {
-            container.classList.remove('active');
+        registerBtn.addEventListener('click', () => {
+            container.classList.add("active");
         });
 
-        signUpLink.addEventListener('click', () => {
-            container.classList.add('active');
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove("active");
         });
 
-        signInForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const email = document.getElementById('signin-email').value;
-            const password = document.getElementById('signin-password').value;
+        signUpForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Empêche le rechargement de la page
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
 
+            // Envoi des données au serveur
             try {
                 const response = await fetch('http://localhost:3000/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'login',
-                        email,
-                        password
-                    })
-                });
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        action: 'register',
+        name,
+        email,
+        password
+    })
+});
 
                 if (response.ok) {
-                    alert('Connexion réussie !');
+                    alert('Inscription réussie !');
                 } else {
-                    const data = await response.json();
-                    alert(`Erreur lors de la connexion: ${data.error}`);
+                    alert('Erreur lors de l\'inscription.');
                 }
             } catch (error) {
                 console.error('Erreur:', error);
@@ -336,8 +341,36 @@
                 if (response.ok) {
                     alert('Inscription réussie !');
                 } else {
-                    const data = await response.json();
-                    alert(`Erreur lors de l'inscription: ${data.error}`);
+                    alert('Erreur lors de l\'inscription.');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue.');
+            }
+        });
+
+        signInForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'login',
+                        email,
+                        password
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Connexion réussie !');
+                } else {
+                    alert('Erreur lors de la connexion.');
                 }
             } catch (error) {
                 console.error('Erreur:', error);
@@ -345,6 +378,7 @@
             }
         });
     </script>
+
 </body>
 
 </html>
