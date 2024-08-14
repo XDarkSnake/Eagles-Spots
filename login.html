@@ -1,355 +1,278 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> <!--https://boxicons.com/ -->
     <title>Connexion</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+        :root {
+            --white-color: hsl(0, 0%, 100%);
+            --black-color: hsl(0, 0%, 0%);
+            --body-font: "Poppins", sans-serif;
+            --h1-font-size: 1.75rem;
+            --normal-font-size: 1rem;
+            --small-font-size: .813rem;
+            --font-medium: 500;
+        }
 
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
+            padding: 0;
+            margin: 0;
         }
 
-        body {
-            background-color: rgba(0, 0, 0, 0.795);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            height: 100vh;
+        body,
+        input,
+        button {
+            font-size: var(--normal-font-size);
+            font-family: var(--body-font);
+            color: var(--white-color);
         }
 
-        .container {
-            background-color: #fff;
-            border-radius: 30px;
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.35);
-            position: relative;
-            overflow: hidden;
-            width: 768px;
-            max-width: 100%;
-            min-height: 480px;
-        }
-
-        .container p {
-            font-size: 14px;
-            line-height: 20px;
-            letter-spacing: 0.3px;
-            margin: 20px 0;
-        }
-
-        .container span {
-            font-size: 12px;
-        }
-
-        .container a {
-            color: #333;
-            font-size: 13px;
-            text-decoration: none;
-            margin: 15px 0 10px;
-        }
-
-        .container button {
-            background-color: rgb(255, 13, 13);
-            color: #fff;
-            font-size: 12px;
-            padding: 10px 45px;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        .container button.hidden {
-            background-color: transparent;
-            border-color: #fff;
-        }
-
-        .container form {
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 0 40px;
-            height: 100%;
-        }
-
-        .container input {
-            background-color: #eee;
+        input,
+        button {
             border: none;
-            margin: 8px 0;
-            padding: 10px 15px;
-            font-size: 13px;
-            border-radius: 8px;
-            width: 100%;
             outline: none;
         }
 
-        .form-container {
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .login {
+            position: relative;
+            height: 100vh;
+            display: grid;
+            align-items: center;
+        }
+
+        .login__img {
             position: absolute;
-            top: 0;
+            width: 100%;
             height: 100%;
-            transition: all 0.6s ease-in-out;
+            object-fit: cover;
+            object-position: center;
         }
 
-        .sign-in {
-            left: 0;
-            width: 50%;
-            z-index: 2;
+        .login__form {
+            position: relative;
+            background-color: hsla(0, 0%, 10%, 0.1);
+            border: 2px solid var(--white-color);
+            margin-inline: 1.5rem;
+            padding: 2.5rem 1.5rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(8px);
         }
 
-        .container.active .sign-in {
-            transform: translateX(100%);
+        .login__title {
+            text-align: center;
+            font-size: var(--h1-font-size);
+            font-weight: var(--font-medium);
+            margin-bottom: 2rem;
         }
 
-        .sign-up {
-            left: 0;
-            width: 50%;
-            opacity: 0;
+        .login__content, .login__box {
+            display: grid;
+        }
+
+        .login__content {
+            row-gap: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .login__box {
+            grid-template-columns: max-content 1fr;
+            align-items: center;
+            column-gap: 0.75rem;
+            border-bottom: 2px solid var(--white-color);
+        }
+
+        .login__icon, .login__eye {
+            font-size: 1.25rem;
+        }
+
+        .login__input {
+            width: 100%;
+            padding-block: 0.8rem;
+            background: none;
+            color: var(--white-color);
+            position: relative;
             z-index: 1;
         }
 
-        .container.active .sign-up {
-            transform: translateX(100%);
-            opacity: 1;
-            z-index: 5;
-            animation: move 0.6s;
-        }
-
-        @keyframes move {
-
-            0%,
-            49.99% {
-                opacity: 0;
-                z-index: 1;
-            }
-
-            50%,
-            100% {
-                opacity: 1;
-                z-index: 5;
-            }
-        }
-
-        .social-icons {
-            margin: 20px 0;
-        }
-
-        .social-icons a {
-            border: 1px solid #ccc;
-            border-radius: 20%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 3px;
-            width: 40px;
-            height: 40px;
-        }
-
-        .toggle-container {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 50%;
-            height: 100%;
-            overflow: hidden;
-            transition: all 0.6s ease-in-out;
-            border-radius: 20px;
-            z-index: 1000;
-        }
-
-        .container.active .toggle-container {
-            transform: translateX(-100%);
-            border-radius: 20px;
-        }
-
-        .toggle {
-            background-color: rgba(255, 4, 4, 0.952);
-            height: 100%;
-            color: #fff;
+        .login__box-input {
             position: relative;
-            left: -100%;
-            height: 100%;
-            width: 200%;
-            transform: translateX(0);
-            transition: all 0.6s ease-in-out;
         }
 
-        .container.active .toggle {
-            transform: translateX(50%);
-        }
-
-        .toggle-panel {
+        .login__label {
             position: absolute;
-            width: 50%;
-            height: 100%;
+            left: 0;
+            top: 13px;
+            font-weight: var(--font-medium);
+            transition: top 0.3s, font-size 0.3s;
+        }
+
+        .login__eye {
+            position: absolute;
+            right: 0;
+            top: 18px;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .login__box:nth-child(2) input {
+            padding-right: 1.8rem;
+        }
+
+        .login__check, .login__check-group {
             display: flex;
             align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 0 30px;
+            justify-content: space-between;
+        }
+
+        .login__check {
+            margin-bottom: 1.5rem;
+        }
+
+        .login__check-label, .login__forgot, .login__register {
+            font-size: var(--small-font-size);
+        }
+
+        .login__check-group {
+            column-gap: 0.5rem;
+        }
+
+        .login__check-input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .login__forgot {
+            color: var(--white-color);
+        }
+
+        .login__forgot:hover {
+            text-decoration: underline;
+        }
+
+        .login__button {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: var(--white-color);
+            font-weight: var(--font-medium);
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+
+        .login__register {
             text-align: center;
-            top: 0;
-            transform: translateX(0);
-            transition: all 0.6s ease-in-out;
         }
 
-        .toggle-left {
-            transform: translateX(-200%);
+        .login__register a {
+            color: var(--white-color);
+            font-weight: var(--font-medium);
         }
 
-        .container.active .toggle-left {
-            transform: translateX(0);
+        .login__register a:hover {
+            text-decoration: underline;
         }
 
-        .toggle-right {
-            right: 0;
-            transform: translateX(0);
+        .login__input:focus + .login__label {
+            top: -12px;
+            font-size: var(--small-font-size);
+        }
+
+        .login__input:not(:placeholder-shown).login__input:not(:focus) + .login__label {
+            top: -12px;
+            font-size: var(--small-font-size);
+        }
+
+        @media screen and (min-width: 576px) {
+            .login {
+                justify-content: center;
+            }
+
+            .login__form {
+                width: 432px;
+                padding: 4rem 3rem 3.5rem;
+                border-radius: 1.5rem;
+            }
+
+            .login__title {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
-
 <body>
+    <div class="login">
+        <img src="login-bg.png" alt="Image de fond" class="login__img">
+        <form class="login__form">
+            <h1 class="login__title">Connexion</h1>
 
-    <div class="container" id="container">
-        <div class="form-container sign-up">
-            <form id="sign-up-form">
-                <h1>Créer un compte</h1>
-                <div class="social-icons">
-                    <a href="#" class="icons"><i class='bx bxl-google'></i></a>
-                    <a href="#" class="icons"><i class='bx bxl-facebook'></i></a>
-                    <a href="#" class="icons"><i class='bx bxl-github'></i></a>
-                    <a href="#" class="icons"><i class='bx bxl-linkedin'></i></a>
+            <div class="login__content">
+                <div class="login__box">
+                    <i class="ri-user-line login__icon"></i>
+                    <div class="login__box-input">
+                        <input type="text" class="login__input" placeholder=" ">
+                        <label for="" class="login__label">Nom d'utilisateur</label>
+                    </div>
                 </div>
-                <span>Inscrivez-vous avec un e-mail</span>
-                <input type="text" id="signup-name" placeholder="Nom" required>
-                <input type="email" id="signup-email" placeholder="Entrez votre e-mail" required>
-                <input type="password" id="signup-password" placeholder="Entrez votre mot de passe" required>
-                <button type="submit">Inscription</button>
-            </form>
-        </div>
 
-        <div class="form-container sign-in">
-            <form id="sign-in-form">
-                <h1>Connexion</h1>
-                <div class="social-icons">
-                    <a href="#" class="icons"><i class='bx bxl-google'></i></a>
-                    <a href="#" class="icons"><i class='bx bxl-facebook'></i></a>
-                    <a href="#" class="icons"><i class='bx bxl-github'></i></a>
-                    <a href="#" class="icons"><i class='bx bxl-linkedin'></i></a>
-                </div>
-                <span>Connectez-vous avec e-mail et mot de passe</span>
-                <input type="email" id="signin-email" placeholder="Entrez votre e-mail" required>
-                <input type="password" id="signin-password" placeholder="Entrez votre mot de passe" required>
-                <a href="#">Mot de passe oublié ?</a>
-                <button type="submit">Connexion</button>
-            </form>
-        </div>
-
-        <div class="toggle-container">
-            <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <h1>Heureux de vous revoir !</h1>
-                    <p>Connectez-vous avec ID & mot de passe</p>
-                    <button class="hidden" id="login">Connexion</button>
-                </div>
-                <div class="toggle-panel toggle-right">
-                    <h1>Salut !</h1>
-                    <p>Créer un compte pour commencer</p>
-                    <button class="hidden" id="register">Inscription</button>
+                <div class="login__box">
+                    <i class="ri-lock-line login__icon"></i>
+                    <div class="login__box-input">
+                        <input type="password" id="login-pass" class="login__input" placeholder=" ">
+                        <label for="login-pass" class="login__label">Mot de passe</label>
+                        <i class="ri-eye-off-line login__eye" id="login-eye"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div class="login__check">
+                <div class="login__check-group">
+                    <input type="checkbox" class="login__check-input">
+                    <label for="" class="login__check-label">Se souvenir de moi</label>
+                </div>
+                <a href="#" class="login__forgot">Mot de passe oublié ?</a>
+            </div>
+
+            <button class="login__button">Se connecter</button>
+
+            <div class="login__register">
+                <span>Vous n'avez pas de compte ? <a href="#">S'inscrire</a></span>
+            </div>
+        </form>
     </div>
 
     <script>
-        const container = document.getElementById('container');
-        const registerBtn = document.getElementById('register');
-        const loginBtn = document.getElementById('login');
-        const signUpForm = document.getElementById('sign-up-form');
-        const signInForm = document.getElementById('sign-in-form');
+        const showHiddenPass = (loginPass, loginEye) => {
+            const input = document.getElementById(loginPass),
+                iconEye = document.getElementById(loginEye)
 
-        registerBtn.addEventListener('click', () => {
-            container.classList.add("active");
-        });
-
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove("active");
-        });
-
-        signUpForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-
-            try {
-                const response = await fetch('http://localhost:3000/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'register',
-                        name: name,
-                        email: email,
-                        password: password
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert(data.message);
+            iconEye.addEventListener('click', () => {
+                if (input.type === 'password') {
+                    input.type = 'text'
+                    iconEye.classList.add('ri-eye-line')
+                    iconEye.classList.remove('ri-eye-off-line')
                 } else {
-                    alert(`Erreur: ${data.error}`);
+                    input.type = 'password'
+                    iconEye.classList.remove('ri-eye-line')
+                    iconEye.classList.add('ri-eye-off-line')
                 }
-            } catch (error) {
-                console.error('Erreur lors de la requête:', error);
-            }
-        });
+            })
+        }
 
-        signInForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const email = document.getElementById('signin-email').value;
-            const password = document.getElementById('signin-password').value;
-
-            try {
-                const response = await fetch('http://localhost:3000/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'login',
-                        email: email,
-                        password: password
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert(data.message);
-                } else {
-                    alert(`Erreur: ${data.error}`);
-                }
-            } catch (error) {
-                console.error('Erreur lors de la requête:', error);
-            }
-        });
+        showHiddenPass('login-pass', 'login-eye')
     </script>
 </body>
-
 </html>
