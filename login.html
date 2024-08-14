@@ -126,7 +126,6 @@
         }
 
         @keyframes move {
-
             0%,
             49.99% {
                 opacity: 0;
@@ -288,38 +287,6 @@
 
         signUpForm.addEventListener('submit', async (event) => {
             event.preventDefault(); // Empêche le rechargement de la page
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-
-            // Envoi des données au serveur
-            try {
-                const response = await fetch('http://localhost:3000/submit', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        action: 'register',
-        name,
-        email,
-        password
-    })
-});
-
-                if (response.ok) {
-                    alert('Inscription réussie !');
-                } else {
-                    alert('Erreur lors de l\'inscription.');
-                }
-            } catch (error) {
-                console.error('Erreur:', error);
-                alert('Une erreur est survenue.');
-            }
-        });
-
-        signUpForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
