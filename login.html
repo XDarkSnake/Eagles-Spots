@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
+    <title>Connexion / Inscription</title>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap">
     <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
     <style>
+        /* Styles similaires pour les deux formulaires */
         :root {
             --white-color: hsl(0, 0%, 100%);
             --black-color: hsl(0, 0%, 0%);
@@ -48,14 +49,14 @@
             height: auto;
         }
 
-        .login {
+        .container {
             position: relative;
             height: 100vh;
             display: grid;
             align-items: center;
         }
 
-        .login__img {
+        .container__img {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -63,7 +64,7 @@
             object-position: center;
         }
 
-        .login__form {
+        .container__form {
             position: relative;
             background-color: hsla(0, 0%, 10%, 0.1);
             border: 2px solid var(--white-color);
@@ -71,36 +72,39 @@
             padding: 2.5rem 1.5rem;
             border-radius: 1rem;
             backdrop-filter: blur(8px);
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
         }
 
-        .login__title {
+        .form__title {
             text-align: center;
             font-size: var(--h1-font-size);
             font-weight: var(--font-medium);
             margin-bottom: 2rem;
         }
 
-        .login__content, .login__box {
+        .form__content, .form__box {
             display: grid;
         }
 
-        .login__content {
+        .form__content {
             row-gap: 1.75rem;
             margin-bottom: 1.5rem;
         }
 
-        .login__box {
+        .form__box {
             grid-template-columns: max-content 1fr;
             align-items: center;
             column-gap: 0.75rem;
             border-bottom: 2px solid var(--white-color);
         }
 
-        .login__icon, .login__eye {
+        .form__icon, .form__eye {
             font-size: 1.25rem;
         }
 
-        .login__input {
+        .form__input {
             width: 100%;
             padding-block: 0.8rem;
             background: none;
@@ -109,11 +113,11 @@
             z-index: 1;
         }
 
-        .login__box-input {
+        .form__box-input {
             position: relative;
         }
 
-        .login__label {
+        .form__label {
             position: absolute;
             left: 0;
             top: 13px;
@@ -121,7 +125,7 @@
             transition: top 0.3s, font-size 0.3s;
         }
 
-        .login__eye {
+        .form__eye {
             position: absolute;
             right: 0;
             top: 18px;
@@ -129,42 +133,42 @@
             cursor: pointer;
         }
 
-        .login__box:nth-child(2) input {
+        .form__box:nth-child(2) input {
             padding-right: 1.8rem;
         }
 
-        .login__check, .login__check-group {
+        .form__check, .form__check-group {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .login__check {
+        .form__check {
             margin-bottom: 1.5rem;
         }
 
-        .login__check-label, .login__forgot, .login__register {
+        .form__check-label, .form__forgot, .form__toggle {
             font-size: var(--small-font-size);
         }
 
-        .login__check-group {
+        .form__check-group {
             column-gap: 0.5rem;
         }
 
-        .login__check-input {
+        .form__check-input {
             width: 16px;
             height: 16px;
         }
 
-        .login__forgot {
+        .form__forgot {
             color: var(--white-color);
         }
 
-        .login__forgot:hover {
+        .form__forgot:hover {
             text-decoration: underline;
         }
 
-        .login__button {
+        .form__button {
             width: 100%;
             padding: 1rem;
             border-radius: 0.5rem;
@@ -176,99 +180,143 @@
             font-size: large;
         }
 
-        .login__button:hover {
+        .form__button:hover {
             color: black;
             background-color: #d9d9d9;
         }
 
-        .login__register {
+        .form__toggle {
             text-align: center;
         }
 
-        .login__register a {
+        .form__toggle a {
             color: var(--white-color);
             font-weight: var(--font-medium);
         }
 
-        .login__register a:hover {
+        .form__toggle a:hover {
             text-decoration: underline;
         }
 
-        .login__input:focus + .login__label {
+        .form__input:focus + .form__label {
             top: -12px;
             font-size: var(--small-font-size);
         }
 
-        .login__input:not(:placeholder-shown).login__input:not(:focus) + .login__label {
+        .form__input:not(:placeholder-shown).form__input:not(:focus) + .form__label {
             top: -12px;
             font-size: var(--small-font-size);
         }
 
         @media screen and (min-width: 576px) {
-            .login {
+            .container {
                 justify-content: center;
             }
 
-            .login__form {
+            .container__form {
                 width: 432px;
                 padding: 4rem 3rem 3.5rem;
                 border-radius: 1.5rem;
             }
 
-            .login__title {
+            .form__title {
                 font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login">
-        <img src="login-bg.png" alt="Image de fond" class="login__img">
-        <form id="loginForm" class="login__form">
-            <h1 class="login__title">Connexion</h1>
+    <div class="container">
+        <img src="login-bg.png" alt="Image de fond" class="container__img">
+        
+        <!-- Formulaire de connexion -->
+        <form id="loginForm" class="container__form" data-form="login">
+            <h1 class="form__title">Connexion</h1>
 
-            <div class="login__content">
-                <div class="login__box">
-                    <i class="ri-user-line login__icon"></i>
-                    <div class="login__box-input">
-                        <input type="text" name="email" class="login__input" placeholder=" ">
-                        <label for="email" class="login__label">Email</label>
+            <div class="form__content">
+                <div class="form__box">
+                    <i class="ri-user-line form__icon"></i>
+                    <div class="form__box-input">
+                        <input type="text" name="email" id="login-email" class="form__input" placeholder=" ">
+                        <label for="login-email" class="form__label">Email</label>
                     </div>
                 </div>
 
-                <div class="login__box">
-                    <i class="ri-lock-line login__icon"></i>
-                    <div class="login__box-input">
-                        <input type="password" id="login-pass" name="password" class="login__input" placeholder=" ">
-                        <label for="login-pass" class="login__label">Mot de passe</label>
-                        <i class="ri-eye-off-line login__eye" id="login-eye"></i>
+                <div class="form__box">
+                    <i class="ri-lock-line form__icon"></i>
+                    <div class="form__box-input">
+                        <input type="password" id="login-password" name="password" class="form__input" placeholder=" ">
+                        <label for="login-password" class="form__label">Mot de passe</label>
+                        <i class="ri-eye-off-line form__eye" id="login-eye"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="login__check">
-                <div class="login__check-group">
-                    <input type="checkbox" class="login__check-input">
-                    <label for="" class="login__check-label">Se souvenir de moi</label>
+            <div class="form__check">
+                <div class="form__check-group">
+                    <input type="checkbox" class="form__check-input">
+                    <label for="" class="form__check-label">Se souvenir de moi</label>
                 </div>
-                <a href="#" class="login__forgot">Mot de passe oublié ?</a>
+                <a href="#" class="form__forgot">Mot de passe oublié ?</a>
             </div>
 
-            <button type="submit" class="login__button">Se connecter</button>
+            <button type="submit" class="form__button">Se connecter</button>
 
-            <div class="login__register">
-                <span>Vous n'avez pas de compte ? <a href="#">S'inscrire</a></span>
+            <div class="form__toggle">
+                <span>Vous n'avez pas de compte ? <a href="#" id="switch-to-signup">S'inscrire</a></span>
+            </div>
+        </form>
+
+        <!-- Formulaire d'inscription -->
+        <form id="signupForm" class="container__form" data-form="signup" style="display: none;">
+            <h1 class="form__title">Inscription</h1>
+
+            <div class="form__content">
+                <div class="form__box">
+                    <i class="ri-user-line form__icon"></i>
+                    <div class="form__box-input">
+                        <input type="text" name="email" id="signup-email" class="form__input" placeholder=" ">
+                        <label for="signup-email" class="form__label">Email</label>
+                    </div>
+                </div>
+
+                <div class="form__box">
+                    <i class="ri-lock-line form__icon"></i>
+                    <div class="form__box-input">
+                        <input type="password" id="signup-password" name="password" class="form__input" placeholder=" ">
+                        <label for="signup-password" class="form__label">Mot de passe</label>
+                        <i class="ri-eye-off-line form__eye" id="signup-eye"></i>
+                    </div>
+                </div>
+
+                <div class="form__box">
+                    <i class="ri-lock-line form__icon"></i>
+                    <div class="form__box-input">
+                        <input type="password" id="signup-password-confirm" name="password-confirm" class="form__input" placeholder=" ">
+                        <label for="signup-password-confirm" class="form__label">Confirmer le mot de passe</label>
+                        <i class="ri-eye-off-line form__eye" id="signup-eye-confirm"></i>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="form__button">S'inscrire</button>
+
+            <div class="form__toggle">
+                <span>Vous avez déjà un compte ? <a href="#" id="switch-to-login">Se connecter</a></span>
             </div>
         </form>
     </div>
 
     <script>
-        // Script pour gérer la soumission du formulaire
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        // Script pour gérer la soumission des formulaires
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+
+        loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const email = document.querySelector('input[name="email"]').value;
-            const password = document.querySelector('input[name="password"]').value;
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
 
             fetch('http://localhost:3000/login', {
                 method: 'POST',
@@ -286,10 +334,38 @@
             });
         });
 
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const passwordConfirm = document.getElementById('signup-password-confirm').value;
+
+            if (password !== passwordConfirm) {
+                alert('Les mots de passe ne correspondent pas.');
+                return;
+            }
+
+            fetch('http://localhost:3000/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        });
+
         // Script pour afficher ou masquer le mot de passe
-        const showHiddenPass = (loginPass, loginEye) => {
-            const input = document.getElementById(loginPass),
-                iconEye = document.getElementById(loginEye);
+        const showHiddenPass = (passId, eyeId) => {
+            const input = document.getElementById(passId);
+            const iconEye = document.getElementById(eyeId);
 
             iconEye.addEventListener('click', () => {
                 if (input.type === 'password') {
@@ -304,7 +380,22 @@
             });
         }
 
-        showHiddenPass('login-pass', 'login-eye');
+        showHiddenPass('login-password', 'login-eye');
+        showHiddenPass('signup-password', 'signup-eye');
+        showHiddenPass('signup-password-confirm', 'signup-eye-confirm');
+
+        // Script pour basculer entre les formulaires
+        document.getElementById('switch-to-signup').addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        });
+
+        document.getElementById('switch-to-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
     </script>
 </body>
 </html>
