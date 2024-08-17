@@ -16,20 +16,23 @@
         #mapid {
             width: 100%;
             position: absolute;
-            top: 50px;
+            top: 0;
+            /* Laissez cet espace pour la bannière en haut */
             left: 0;
-            height: calc(100vh - 50px);
+            height: 100vh;
+            /* Hauteur totale moins la hauteur de la bannière */
             transition: top 0.3s ease, height 0.3s ease;
         }
 
         #banner {
             position: fixed;
             top: -50px;
+            /* Cache la bannière en dehors de l'écran au début */
             left: 0;
             width: 100%;
             height: 50px;
-            background-color: white;
-            color: black;
+            background-color: black;
+            color: white;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -37,6 +40,7 @@
             box-sizing: border-box;
             z-index: 1001;
             transition: top 0.3s ease;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .logo-container {
@@ -46,25 +50,34 @@
 
         #banner img {
             height: 50px;
+            margin-left: 20px;
         }
 
         #banner h1 {
-            color: black;
+            color: white;
             font-size: 18px;
+            margin-left: 20px;
         }
 
         #banner button {
             background: none;
             border: none;
-            color: black;
+            color: white;
             cursor: pointer;
             font-size: 24px;
             padding: 0;
-            margin-right: 15px;
+        }
+
+        #social-button {
+            margin-right: 200px;
+        }
+
+        #login-button {
+            margin-right: 20px;
         }
 
         #banner button:hover {
-            color: #00aa91;
+            color: grey;
         }
 
         #locate-button {
@@ -113,13 +126,25 @@
         }
 
         #popup-form .banner {
-            background-color: blue;
-            color: white;
-            padding: 10px;
+            padding: 0;
             text-align: center;
             border-radius: 5px 5px 0 0;
             cursor: pointer;
+            background-color: transparent;
+            /* Enlève le fond bleu */
         }
+
+        #popup-form .banner img {
+            width: 100%;
+            /* Ajuste la largeur de l'image à 100% de la bannière */
+            border-radius: 5px 5px 0 0;
+            /* Garde les coins arrondis */
+            display: block;
+            /* Évite les espaces en dessous de l'image */
+        }
+
+
+
 
         #popup-form form {
             display: flex;
@@ -151,26 +176,88 @@
         #popup-form button.cancel {
             background-color: red;
         }
+
+        .social-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            /* Positionne le menu juste en dessous du bouton */
+            left: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1002;
+            padding: 10px;
+            min-width: 150px;
+            box-sizing: border-box;
+            margin: 0;
+            /* Assurez-vous qu'il n'y a pas de marge ajoutée */
+        }
+
+        .social-menu a {
+            display: flex;
+            align-items: center;
+            color: black;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+
+        .social-menu a:hover {
+            color: #00aa91;
+        }
+
+        .social-icon {
+            font-size: 30px;
+            margin-right: 10px;
+        }
+
+        /* Dégradé de couleurs pour l'icône Instagram */
+        /* Dégradé de couleurs pour l'icône Instagram */
+        .fa-instagram {
+            background: linear-gradient(45deg, #F58529, #DD2A7B, #8134AF, #515BD4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* Propriété standard pour la compatibilité */
+            -webkit-text-fill-color: transparent;
+            font-size: 30px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+
+        /* Couleurs officielles pour l'icône YouTube */
+        .fa-youtube {
+            background: linear-gradient(45deg, #FF0000, #FF0000);
+            /* Rouge officiel de YouTube */
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* Propriété standard pour la compatibilité */
+            -webkit-text-fill-color: transparent;
+            font-size: 30px;
+            margin-right: 10px;
+            display: inline-block;
+        }
     </style>
 </head>
 
 <body>
     <div id="banner">
         <div class="logo-container">
-            <img src="logo.jpg" alt="Logo">
+            <img src="logo.png" alt="Logo">
             <h1>Eagles Spots</h1>
         </div>
-        <div class="social-list">
-            <a href="https://www.instagram.com/eagles_fpv/" target="_blank">
-                <i class="fab fa-instagram"></i>
-              </a>
-              <a href="https://www.youtube.com/@Eagles_FPV" target="_blank">
-                <i class="fab fa-youtube"></i>
-              </a>              
+
+        <div style="display: flex; align-items: center;">
+            <button id="social-button">
+                Réseaux
+            </button>
+
+            <button id="login-button">
+                <i class="fas fa-user"></i>
+            </button>
         </div>
-        <button id="login-button">
-            <i class="fas fa-user"></i>
-        </button>
     </div>
 
     <div id="mapid"></div>
@@ -179,7 +266,10 @@
     </button>
     <div id="overlay"></div>
     <div id="popup-form">
-        <div class="banner">Importer une image</div>
+        <div class="banner">
+            <img src="add-img.png" alt="Bannière">
+        </div>
+
         <form id="spot-form">
             <label for="name">Nom :</label>
             <input type="text" id="name" required><br>
@@ -191,9 +281,19 @@
         </form>
     </div>
 
+    <div class="social-menu" id="social-menu">
+        <a href="https://www.instagram.com/eagles_fpv/" target="_blank">
+            <i class="fab fa-instagram social-icon"></i> Instagram
+        </a>
+        <a href="https://www.youtube.com/@Eagles_FPV" target="_blank">
+            <i class="fab fa-youtube social-icon"></i> YouTube
+        </a>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialisation de la carte
             var mymap = L.map('mapid').setView([0, 0], 13);
             var spotsLayer = L.layerGroup().addTo(mymap);
 
@@ -233,10 +333,10 @@
                     navigator.geolocation.getCurrentPosition(function (position) {
                         var lat = position.coords.latitude;
                         var lng = position.coords.longitude;
-                        onLocationFound({ latlng: L.latLng(lat, lng) });
-                    }, onLocationError, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+                        onLocationFound({ latlng: { lat: lat, lng: lng } });
+                    }, onLocationError);
                 } else {
-                    alert("La géolocalisation n'est pas supportée par ce navigateur.");
+                    alert('Géolocalisation non supportée par ce navigateur.');
                 }
             }
 
@@ -249,20 +349,21 @@
             mymap.on('click', function (e) {
                 var form = document.getElementById('popup-form');
                 var overlay = document.getElementById('overlay');
+                var tempMarker = L.marker(e.latlng, { icon: spotIcon }).addTo(spotsLayer);
+
                 form.style.display = 'block';
                 overlay.style.display = 'block';
 
-                var tempMarker = L.marker(e.latlng, { icon: spotIcon }).addTo(spotsLayer);
-
-                document.querySelector('.banner').onclick = function () {
-                    document.getElementById('photo').click();
+                form.querySelector('.banner').onclick = function () {
+                    form.querySelector('#photo').click();
                 };
 
                 document.getElementById('spot-form').onsubmit = function (event) {
                     event.preventDefault();
                     var name = document.getElementById('name').value;
                     var note = document.getElementById('note').value;
-                    var photo = document.getElementById('photo').files[0];
+                    var photoInput = document.getElementById('photo');
+                    var photo = photoInput.files[0];
 
                     var formData = new FormData();
                     formData.append('nom', name);
@@ -322,9 +423,14 @@
                 });
 
             var banner = document.getElementById('banner');
-            var map = document.getElementById('mapid');
             var locateButton = document.getElementById('locate-button');
+            var map = document.getElementById('mapid');
+            var socialButton = document.getElementById('social-button');
+            var socialMenu = document.getElementById('social-menu');
+
             var bannerHeight = 50;
+            var isMouseOverSocialMenu = false;
+            var isMouseOverLocateButton = false;
 
             function adjustMapHeight() {
                 var isBannerVisible = banner.style.top === '0px';
@@ -332,22 +438,77 @@
                 map.style.top = isBannerVisible ? bannerHeight + 'px' : '0px';
                 map.style.height = newHeight + 'px';
                 locateButton.style.top = isBannerVisible ? (bannerHeight + 10) + 'px' : '10px';
+                updateSocialMenuPosition();
             }
 
-            document.addEventListener('mousemove', function (e) {
-                if (e.clientY < 30) {
-                    banner.style.top = '0px';
-                } else {
-                    banner.style.top = '-50px';
+            function updateSocialMenuPosition() {
+                var buttonRect = socialButton.getBoundingClientRect();
+                var bannerRect = banner.getBoundingClientRect();
+                socialMenu.style.top = (buttonRect.bottom - bannerRect.top) + 'px';
+                socialMenu.style.left = (buttonRect.left - bannerRect.left) + 'px';
+            }
+
+            document.getElementById('social-button').addEventListener('click', function () {
+                var isMenuVisible = socialMenu.style.display === 'block';
+                socialMenu.style.display = isMenuVisible ? 'none' : 'block';
+                updateSocialMenuPosition();
+            });
+
+            document.addEventListener('click', function (event) {
+                var isClickInsideMenu = socialMenu.contains(event.target);
+                var isClickOnButton = socialButton.contains(event.target);
+                if (!isClickOnButton && !isClickInsideMenu) {
+                    socialMenu.style.display = 'none';
                 }
-                adjustMapHeight();
             });
 
-            adjustMapHeight();
-
-            document.getElementById('login-button').addEventListener('click', function () {
-                window.location.href = 'https://xdarksnake.github.io/Eagles-Spots/login';
+            locateButton.addEventListener('mouseover', function () {
+                isMouseOverLocateButton = true;
+                socialMenu.style.display = 'none'; // Ferme le menu social uniquement
             });
+
+            locateButton.addEventListener('mouseout', function () {
+                isMouseOverLocateButton = false;
+                if (!isMouseOverSocialMenu) {
+                    banner.style.top = '0px'; // La bannière ne sera pas cachée
+                    adjustMapHeight();
+                }
+            });
+
+            document.addEventListener('mousemove', function (e) {
+                var isBannerVisible = banner.style.top === '0px';
+                var mouseX = e.clientX;
+                var mouseY = e.clientY;
+                var windowHeight = window.innerHeight;
+                var windowWidth = window.innerWidth;
+
+                if (isMouseOverLocateButton) {
+                    return; // Ignore les ajustements de la bannière lorsque la souris est sur le bouton de localisation
+                }
+
+                if ((mouseY < 30 || mouseY > (windowHeight - 30) || mouseX < 30 || mouseX > (windowWidth - 30)) && !isMouseOverSocialMenu) {
+                    banner.style.top = '0px';
+                    adjustMapHeight();
+                } else if (mouseY > 150 && mouseY < (windowHeight - 30) && mouseX > 30 && mouseX < (windowWidth - 30) && isBannerVisible && !isMouseOverSocialMenu) {
+                    banner.style.top = '-50px';
+                    socialMenu.style.display = 'none'; // Ferme le menu social lorsque la bannière disparaît
+                    adjustMapHeight();
+                }
+            });
+
+            socialMenu.addEventListener('mouseover', function () {
+                isMouseOverSocialMenu = true;
+            });
+
+            socialMenu.addEventListener('mouseout', function () {
+                isMouseOverSocialMenu = false;
+                if (!isMouseOverLocateButton) {
+                    banner.style.top = '0px';
+                    adjustMapHeight();
+                }
+            });
+
+            window.addEventListener('resize', adjustMapHeight);
         });
     </script>
 </body>
