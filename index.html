@@ -125,26 +125,18 @@
             transform: translate(-50%, -50%);
         }
 
-        #popup-form .banner {
-            padding: 0;
-            text-align: center;
-            border-radius: 5px 5px 0 0;
-            cursor: pointer;
-            background-color: transparent;
-            /* Enlève le fond bleu */
-        }
-
         #popup-form .banner img {
             width: 100%;
-            /* Ajuste la largeur de l'image à 100% de la bannière */
-            border-radius: 5px 5px 0 0;
-            /* Garde les coins arrondis */
+            height: 70px;
+            /* Ajuste la hauteur selon tes besoins */
+            object-fit: cover;
+            border-radius: 5px;
             display: block;
-            /* Évite les espaces en dessous de l'image */
+            border: 2px solid black;
+            /* Bordure noire autour de l'image */
+            margin-bottom: 10px;
+            /* Ajoute une marge en bas pour espacer l'image du contenu suivant */
         }
-
-
-
 
         #popup-form form {
             display: flex;
