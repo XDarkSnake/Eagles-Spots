@@ -352,6 +352,7 @@
 
                 document.getElementById('spot-form').onsubmit = function (event) {
                     event.preventDefault();
+
                     var name = document.getElementById('name').value;
                     var note = document.getElementById('note').value;
                     var photoInput = document.getElementById('photo');
@@ -366,7 +367,7 @@
                         formData.append('photo', photo);
                     }
 
-                    fetch('http://localhost:3000/points', {
+                    fetch('http://localhost:3000/points', { // Mettez à jour avec l'URL de votre backend
                         method: 'POST',
                         body: formData
                     })
@@ -486,7 +487,24 @@
                     socialMenu.style.display = 'none'; // Ferme le menu social lorsque la bannière disparaît
                     adjustMapHeight();
                 }
+            }); document.addEventListener('mousemove', function (e) {
+                var isBannerVisible = banner.style.top === '0px';
+                var mouseY = e.clientY;
+
+                if (isMouseOverLocateButton) {
+                    return; // Ignore les ajustements de la bannière lorsque la souris est sur le bouton de localisation
+                }
+
+                if (mouseY < 30) {
+                    banner.style.top = '0px';
+                    adjustMapHeight();
+                } else if (mouseY > 150 && isBannerVisible && !isMouseOverSocialMenu) {
+                    banner.style.top = '-50px';
+                    socialMenu.style.display = 'none'; // Ferme le menu social lorsque la bannière disparaît
+                    adjustMapHeight();
+                }
             });
+
 
             socialMenu.addEventListener('mouseover', function () {
                 isMouseOverSocialMenu = true;
